@@ -36,7 +36,15 @@ async def options_root():
             "Access-Control-Allow-Headers": "*",
         },
     )
+from fastapi import Response
 
+@app.options("/latency")
+async def latency_options():
+    response = Response()
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    return response
 @app.post("/latency")
 def get_metrics(req: RequestBody):
     result = {}
