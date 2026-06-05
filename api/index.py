@@ -37,7 +37,7 @@ async def options_root():
         },
     )
 
-@app.post("/")
+@app.post("/latency")
 def get_metrics(req: RequestBody):
     result = {}
 
