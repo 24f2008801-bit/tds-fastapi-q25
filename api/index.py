@@ -36,20 +36,16 @@ class RequestBody(BaseModel):
     threshold_ms: float
 
 
-# OPTIONS /
 @app.options("/")
 async def root_options():
     return Response(headers=CORS_HEADERS)
 
 
-# OPTIONS /latency
 @app.options("/latency")
 async def latency_options():
     return Response(headers=CORS_HEADERS)
 
 
-# POST /
-# POST /latency
 @app.post("/")
 @app.post("/latency")
 def get_metrics(req: RequestBody):
@@ -75,4 +71,6 @@ def get_metrics(req: RequestBody):
             )
         }
 
-    return result
+    return {
+        "regions": result
+    }
