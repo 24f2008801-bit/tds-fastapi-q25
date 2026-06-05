@@ -37,8 +37,23 @@ async def options_root():
         },
     )
 from fastapi import Response
+from fastapi import Response
 
-@app.options("/latency")
+@app.options("/")
+
+async def root_options():
+
+    response = Response()
+
+    response.headers["Access-Control-Allow-Origin"] = "*"
+
+    response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+
+    response.headers["Access-Control-Allow-Headers"] = "*"
+
+    return response
+@app.post("/")
+@app.post("/latency")
 async def latency_options():
     response = Response()
     response.headers["Access-Control-Allow-Origin"] = "*"
