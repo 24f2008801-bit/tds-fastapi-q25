@@ -7,15 +7,20 @@ import os
 
 app = FastAPI()
 
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["POST"],
+    allow_credentials=False,
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Load telemetry data
-with open("telemetry.json", "r") as f:
+# Load telemetry data safely on Vercel
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_FILE = os.path.join(BASE_DIR, "telemetry.json")
+
+with open(DATA_FILE, "r") as f:
     DATA = json.load(f)
 
 class RequestBody(BaseModel):
