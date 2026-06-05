@@ -7,20 +7,20 @@ import os
 
 app = FastAPI()
 
-# CORS middleware
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["*"],
+    allow_credentials=False,
+    allow_methods=["POST", "GET", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
+    expose_headers=["Access-Control-Allow-Origin"],
 )
 
 CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "*",
-    "Access-Control-Expose-Headers": "*",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
 }
 
 # Load telemetry data
@@ -30,23 +30,27 @@ DATA_FILE = os.path.join(BASE_DIR, "telemetry.json")
 with open(DATA_FILE, "r") as f:
     DATA = json.load(f)
 
+
 class RequestBody(BaseModel):
     regions: list[str]
     threshold_ms: float
+
 
 # OPTIONS /
 @app.options("/")
 async def root_options():
     return Response(headers=CORS_HEADERS)
 
+
 # OPTIONS /latency
 @app.options("/latency")
 async def latency_options():
     return Response(headers=CORS_HEADERS)
 
+
 # POST /
-@app.post("/")
 # POST /latency
+@app.post("/")
 @app.post("/latency")
 def get_metrics(req: RequestBody):
 
